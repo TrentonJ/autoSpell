@@ -1,0 +1,58 @@
+The following scripts and explanations allow you to create your own
+word list/dictionary to use with these autoSpell programs if you cannot find a suitable dictionary online.
+
+Some sources for word lists are:
+http://wordlist.aspell.net/
+http://www.md5this.com/tools/wordlists.html
+http://www-personal.umich.edu/~jlawler/wordlist.html
+http://www.mine-control.com/zack/guttenberg/
+https://figshare.com/articles/Word_frequencies_from_Project_Gutenberg_English_texts/1515919
+
+
+And a pre-sorted list of Latin words (mine) can be found at:
+https://archive.org/details/LatinDict
+
+It is best though not required that the dictionary file used with autoSpell be secondarily sorted for word frequency because the program selects the first best match to a word unless it finds an exact match in the dictionary.
+
+
+
+
+#!/bin/bash -
+# script make_word_list.sh
+# purpose - to make a dictionary word list from a text
+# 
+# usage: pipe text into this and it prints to standard output
+# with 1st col. the word count and 2nd column the word 
+#
+# This script assumes no words split at line breaks, but additional 
+# scripting could join those words.
+#
+tr -cs A-Za-z\' '\n' |
+  tr A-Z a-z |
+    sort |
+      uniq -c
+
+
+
+
+#!/bin/bash -
+#
+# script word_list-length.sh
+# purpose - to take the file from make_word_list.sh and add a third column
+# with the word length (number of characters)
+#
+# usage: pipe text into this and it prints to standard output
+# 
+gawk '
+{ printf "%s ", $1; printf "%s ", $2; printf "%s\n", length($2) }
+' 
+
+
+
+So, supposing you found a suitable text file with which to create your dictionary:
+cat textfile | make_word_list.sh | word_list-length.sh | sort -k3n -k1nr | cut -d ' ' -f 2
+
+or if you have an existing word list in single column without known word frequencies:
+cat wordList | gawk '{ printf "%s ", $1; printf "%s\n", length($1) }' | sort -k2n | cut -d ' ' -f 1
+
+
