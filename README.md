@@ -30,3 +30,6 @@ autoSpellSim was written to find and correct these errors.
 Then the author discovered the concept of edit distance and various tools and theories of
 fuzzy searching and spell checking.  The other program autoSpellLev uses the well-known
 Levenshtein algorithm.
+
+**update**
+Now I realize I should have simply used a function pointer in a single program and with input from the user select which filter to use.  But I'm a slightly better coder now. :)
